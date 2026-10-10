@@ -1,0 +1,46 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Stephen Chen <stephen@radxa.com>
+Subject: [PATCH] lemans: Add Radxa AIRbox Q900
+
+Signed-off-by: Stephen Chen <stephen@radxa.com>
+
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -5,6 +5,7 @@ cmake_minimum_required(VERSION 3.10)
+ set(TPLGS
+ 	"arduino-monza\;arduino-monza\;qcom/qcs8300\;"
+ 	"LEMANS-EVK\;LEMANS-EVK\;qcom/sa8775p\;"
++	"LEMANS-Radxa-AIRbox-Q900\;LEMANS-Radxa-AIRbox-Q900\;qcom/sa8775p/radxa/airbox-q900\;"
+ 	"MONACO-EVK\;MONACO-EVK\;qcom/qcs8300\;"
+ 	"Qualcomm-RB5-WSA8815-Speakers-DMIC0\;Qualcomm-RB5-WSA8815-Speakers-DMIC0\;qcom/sm8250\;"
+ 	"Qualcomm-RB5-WSA8815-Speakers-DMIC0-compress\;Qualcomm-RB5-WSA8815-Speakers-DMIC0-compress\;qcom/sm8250\;"
+diff --git a/src/LEMANS-Radxa-AIRbox-Q900.m4 b/src/LEMANS-Radxa-AIRbox-Q900.m4
+new file mode 100644
+--- /dev/null
++++ b/src/LEMANS-Radxa-AIRbox-Q900.m4
+@@ -0,0 +1,24 @@
++# Copyright, Linaro Ltd, 2023
++# SPDX-License-Identifier: BSD-3-Clause
++include(`audioreach/audioreach.m4')
++include(`audioreach/stream-subgraph.m4')
++include(`audioreach/device-subgraph.m4')
++include(`util/route.m4')
++include(`util/mixer.m4')
++include(`audioreach/tokens.m4')
++
++dnl Playback MultiMedia1 (Display Port)
++STREAM_SG_PCM_ADD(audioreach/subgraph-stream-vol-playback.m4, FRONTEND_DAI_MULTIMEDIA1,
++	`S16_LE', 48000, 48000, 2, 2,
++	0x00004005, 0x00004005, 0x00006030, `110000')
++dnl
++
++dnl Display port0 Playback
++DEVICE_SG_ADD(audioreach/subgraph-device-display-port-playback.m4, `DISPLAY_PORT_RX_0', DISPLAY_PORT_RX_0,
++	`S16_LE', 48000, 48000, 2, 2,
++	0, 0, 0, DATA_FORMAT_FIXED_POINT,
++	0x00004012, 0x00004012, 0x00006120, `DISPLAY_PORT_RX_0')
++dnl
++
++STREAM_DEVICE_PLAYBACK_MIXER(DISPLAY_PORT_RX_0, ``DISPLAY_PORT_RX_0'', ``MultiMedia1'')
++STREAM_DEVICE_PLAYBACK_ROUTE(DISPLAY_PORT_RX_0, ``DISPLAY_PORT_RX_0 Audio Mixer'', ``MultiMedia1, stream0.logger1'')
