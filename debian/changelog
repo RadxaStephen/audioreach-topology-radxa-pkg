@@ -1,3 +1,11 @@
+audioreach-topology (1.0.4-4) unstable; urgency=medium
+
+  [ Stephen Chen ]
+  * feat: Add Radxa AIRbox Q900
+  * feat: Add Radxa VMARC-Q9075 IO
+
+ -- "Radxa Computer (Shenzhen) Co., Ltd." <dev@radxa.com>  Wed, 14 Oct 2026 02:32:07 +0000
+
 audioreach-topology (1.0.4-3) unstable; urgency=medium
 
   [ Stephen Chen ]
